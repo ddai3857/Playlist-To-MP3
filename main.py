@@ -23,8 +23,9 @@ def googleLogin():
     
     while (True):
         new_user = input("Do u want to sign in as a new user? (y/n): ")
-        if (new_user == "y" and os.path.exists("token.pickle")):
-            os.remove("token.pickle")
+        if (new_user == "y"):
+            if (os.path.exists("token.pickle")):
+                os.remove("token.pickle")
             break
         if (new_user == "n"):
             break
@@ -155,19 +156,12 @@ def urlToMp3(youtube_urls, youtube_titles):
         
         time.sleep(2)
         
-        finished_downloading = False
-        
-        while (not(finished_downloading)):
-            ctr = 0
-            for downloads in os.listdir(download_path):
-                match = download_regex.match(downloads)
+        while (True):
+            download = os.listdir(download_path)[-1]
+            match = download_regex.match(download)
 
-                if(match):
-                    ctr += 1
-                    break
-            
-            if (ctr == 0):
-                finished_downloading = True
+            if (not(match)):
+                break
                 
         
         print("finished 1 file")
