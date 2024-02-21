@@ -1,6 +1,6 @@
 **Purpose**
 
-    This is a python script that allows you to download all the videos from a youtube playlist into mp3 files
+    This is a python script that allows you to convert all the videos of a youtube playlist into mp3 files
 
 **Requirements (client_secret.json): Because this script uses Oauth for you to login to your Google account, you will need a client_secret.json file**
 1. Go to https://console.cloud.google.com
