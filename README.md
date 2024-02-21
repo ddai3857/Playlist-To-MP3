@@ -1,11 +1,23 @@
 Purpose:
-- This is a python script that takes a youtube playlist and creates a folder named "mp3_folder" that has all the videos in the playlist converted to mp3s.
+- This is a python script that allows you to download all the videos from a youtube playlist into mp3 files
+
+Requirements (client_secret.json): Because this script uses Oauth for you to login to your Google account, you will need a client_secret.json file
+1. Go to https://console.cloud.google.com
+2. Go to the APIs & Services section using the the drop-down menu
+3. Create a project with any name (you don't need an org)
+4. Configure consent screen (Corey Schafer has a video on using Google Oauth that directs you on how to obtain the client_secret.json file [https://youtu.be/vQQEaSnQ_bs?t=306])
+5. Paste the file into the directory of this project and **you're done**
+
+Dependencies (pip install):
+- python-dotenv
+- google-api-python-client
+- google-auth-oauthlib
+- selenium
+
 
 Details:
-- The script will first ask you to login as a new_user. This is because if you have logged in before already, the script will save a token to your previous login (IT DOES NOT KNOW YOUR USERNAME OR PASSWORD)
-- Then it will list out all the playlists on your account and number them starting from #1. You will have to input a number corresponding to the playlists. (Inputting an invalid number will force you to pick another one)
-- The script will then find all the video urls. Selenium will open a chrome driver and go to https://cobalt.tools/ in order to convert the urls to mp3s
-- The newly downloaded mp3s can be found in the folder called "mp3_folder" in the same directory
+- On the first run of the program, it will open up 
+
 
 Notes:
 - If you want to convert a public playlist, just save it to your account and it will show up when you are prompted to select a playlist
