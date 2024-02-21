@@ -98,18 +98,27 @@ def playlistVideosToUrl(credentials):
     video_ids = []
     video_titles = []
     pageToken = None
+    
+    bad_chars = ['<', '>', ':', "\"", "/", "\\", "\|", "\?", "*"]
+    
     while (True):
-        vid_request = youtube.playlistItems().list(part="contentDetails, snippet", playlistId=selected_playlist_id, pageToken=pageToken, maxResults=50)
-        vid_response = vid_request.execute()
+        video_request = youtube.playlistItems().list(part="contentDetails, snippet", playlistId=selected_playlist_id, pageToken=pageToken, maxResults=50)
+        video_response = video_request.execute()
         
-        for item in vid_response["items"]:
+        for item in video_response["items"]:
             video_ids.append(item["contentDetails"]["videoId"])
-            video_titles.append(item["snippet"]["title"])
+            video_title = item["snippet"]["title"]
+            
+            for c in bad_chars:
+                video_title = video_title.replace(c, '_')
+            
+            video_titles.append(video_title)
+            print(video_titles[-1])
         
-        if (vid_response.get("nextPageToken") == None):
+        if (video_response.get("nextPageToken") == None):
             break
         
-        pageToken = vid_response["nextPageToken"]
+        pageToken = video_response["nextPageToken"]
     
     youtube_prefix = "https://youtu.be/"
     
@@ -123,15 +132,23 @@ def playlistVideosToUrl(credentials):
 def urlToMp3(youtube_urls, youtube_titles):    
     path = os.getcwd()
     
+    if os.path.exists("download_folder"):
+        shutil.rmtree("download_folder")
+    os.mkdir("download_folder")
+    
     if os.path.exists("mp3_folder"):
         shutil.rmtree("mp3_folder")
     os.mkdir("mp3_folder")
 
-    download_path = os.path.join(path, "mp3_folder")
+    download_path = os.path.join(path, "download_folder")
+    mp3_path = os.path.join(path, "mp3_folder")
     
     options = webdriver.ChromeOptions()
     prefs = {"download.default_directory": download_path}
     options.add_experimental_option("prefs", prefs)
+    options.add_argument('--headless')
+    options.add_argument('--log-level=3')
+    
     
     service = Service(executable_path="chromedriver.exe")
     driver = webdriver.Chrome(service=service, options=options)
@@ -146,6 +163,8 @@ def urlToMp3(youtube_urls, youtube_titles):
     download_regex = re.compile('.*crdownload$')
     mp3_prefix = ".mp3"
     
+    
+    files_downloaded = 0
     for url, title in zip(youtube_urls, youtube_titles):
         input.clear()
         input.send_keys(url)
@@ -154,24 +173,35 @@ def urlToMp3(youtube_urls, youtube_titles):
         download_button = driver.find_element(By.ID, "download-button")
         download_button.click()
         
-        time.sleep(2)
+        if (len(driver.find_elements(By.XPATH, "//*[contains(@class, 'close-error switch') and text()='got it']")) > 0):
+            try:
+                driver.find_element(By.XPATH, "//*[contains(@class, 'close-error switch') and text()='got it']").click()
+            except:
+                pass
+        
+        time.sleep(5)
         
         while (True):
-            download = os.listdir(download_path)[-1]
+            download = os.listdir(download_path)[0]
             match = download_regex.match(download)
 
             if (not(match)):
                 break
-                
         
-        print("finished 1 file")
+        files_downloaded += 1
+        print(f"finished downloading {files_downloaded} out of {len(youtube_urls)} file")
         
-        old_title = os.listdir(download_path)[-1]
+        old_title = os.listdir(download_path)[0]
         
         old_file = os.path.join(download_path, old_title)
-        new_file = os.path.join(download_path, title) + mp3_prefix
+        new_file = os.path.join(mp3_path, title) + mp3_prefix
         os.rename(old_file, new_file)
+        
+        shutil.rmtree("download_folder")
+        os.mkdir("download_folder")
+        
     
+    print("DONE!!!")
     return
 
 if __name__ == "__main__":
