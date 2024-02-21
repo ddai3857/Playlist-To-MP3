@@ -32,4 +32,4 @@
 
 **Goal**
 
-    Gain experience with accessing APIs and using Python Selenium
+    Gain experience with APIs and using Python Selenium
