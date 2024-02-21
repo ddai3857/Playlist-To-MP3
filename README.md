@@ -6,7 +6,7 @@
 1. Go to https://console.cloud.google.com
 2. Go to the APIs & Services section using the the drop-down menu
 3. Create a project with any name (you don't need an org)
-4. Configure consent screen (Corey Schafer can teach you how to do it in about 4 minutes [https://youtu.be/vQQEaSnQ_bs?t=306])
+4. Configure consent screen (Corey Schafer can teach you how to do it in about 4 minutes https://youtu.be/vQQEaSnQ_bs?t=306)
 5. Paste the file into the project folder and **you're done**
 
 **Dependencies (pip install)**
@@ -17,8 +17,12 @@
     selenium
 
 **Details**
-
-    On the first run of the program, it will open up 
+1. On the first run of the program, you will have to log in to google
+2. The script will save the crendentials token for future runs (IT DOES NOT SAVE YOUR INFORMATION)
+3. Playlists will be listed with numbers in the terminal
+4. Enter the number corresponding to playlist in the terminal
+5. Selenium will download the mp3s using https://cobalt.tools (terminal will show download progress)
+6. Access mp3s in the mp3_folder
 
 
 **Notes**
