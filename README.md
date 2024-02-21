@@ -7,7 +7,7 @@
 2. Go to the APIs & Services section using the the drop-down menu
 3. Create a project with any name (you don't need an org)
 4. Configure consent screen (Corey Schafer can teach you how to do it in about 4 minutes [https://youtu.be/vQQEaSnQ_bs?t=306])
-5. Paste the file into the directory of this project and **you're done**
+5. Paste the file into the project folder and **you're done**
 
 **Dependencies (pip install)**
 
