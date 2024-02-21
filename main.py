@@ -113,7 +113,6 @@ def playlistVideosToUrl(credentials):
                 video_title = video_title.replace(c, '_')
             
             video_titles.append(video_title)
-            print(video_titles[-1])
         
         if (video_response.get("nextPageToken") == None):
             break
@@ -189,7 +188,7 @@ def urlToMp3(youtube_urls, youtube_titles):
                 break
         
         files_downloaded += 1
-        print(f"finished downloading {files_downloaded} out of {len(youtube_urls)} file")
+        print(f"Finished downloading {files_downloaded}/{len(youtube_urls)} file")
         
         old_title = os.listdir(download_path)[0]
         
