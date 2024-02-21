@@ -1,7 +1,6 @@
 import os
 import shutil
 import pickle
-from dotenv import load_dotenv
 import re
 
 from googleapiclient.discovery import build
@@ -22,15 +21,18 @@ def googleLogin():
     credentials = None
     
     while (True):
-        new_user = input("Do u want to sign in as a new user? (y/n): ")
-        if (new_user == "y"):
-            if (os.path.exists("token.pickle")):
-                os.remove("token.pickle")
+        if (os.path.exists("token.pickle")):
+            new_user = input("Do u want to sign in as a new user? (y/n): ")
+            if (new_user == "y"):
+                if (os.path.exists("token.pickle")):
+                    os.remove("token.pickle")
+                break
+            if (new_user == "n"):
+                break
+            print("Invalid input")
+            print()
+        else:
             break
-        if (new_user == "n"):
-            break
-        print("Invalid input")
-        print()
         
         
 
@@ -198,9 +200,10 @@ def urlToMp3(youtube_urls, youtube_titles):
         
         shutil.rmtree("download_folder")
         os.mkdir("download_folder")
-        
+
+    print("--------------DONE!--------------")
+    print("Mp3s can be found in \"mp3_folder\"")
     
-    print("DONE!!!")
     return
 
 if __name__ == "__main__":
