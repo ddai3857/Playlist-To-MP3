@@ -1,6 +1,5 @@
 import os
 import shutil
-import pickle
 import re
 
 from googleapiclient.discovery import build
@@ -131,6 +130,9 @@ def urlToMp3(youtube_urls, youtube_titles):
     return
 
 if __name__ == "__main__":
-    playlistId = input("Enter your playlist id: ")
+    playlistUrl = input("Enter your playlist url: ")
+    playlistId_regex = re.compile('.*=(.*)')
+    playlistId = playlistId_regex.search(playlistUrl).group(1)
+    print(playlistId)
     video_urls, video_titles = playlistVideosToUrl(playlistId)
     urlToMp3(video_urls, video_titles)
