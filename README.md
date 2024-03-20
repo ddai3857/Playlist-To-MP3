@@ -2,27 +2,22 @@
 
     This is a python script that downloads all the videos of a youtube playlist into mp3 files
 
-**Requirements (client_secret.json): Because this script uses Oauth for you to login to your Google account, you will need a client_secret.json file**
-1. Go to https://console.cloud.google.com
-2. Go to the APIs & Services section using the the drop-down menu
-3. Create a project with any name (you don't need an org)
-4. Configure consent screen (Corey Schafer can teach you how to do it in about 4 minutes https://youtu.be/vQQEaSnQ_bs?t=306)
-5. Paste the file into the project folder and **you're done**
+**Requirements (API key): Because this script accesses Youtube's database, you will need obtain an API key from Google**
+
+    Corey Schafer has a great video on how to obtain an API key (https://www.youtube.com/watch?v=th5_9woFJmk&t=1083s&ab_channel=CoreySchafer)
 
 **Dependencies (pip install)**
 
-    python-dotenv
+    python-dotenv (You don't have to create a python environment if you really don't want to)
     google-api-python-client
     google-auth-oauthlib
     selenium
 
 **Details**
-1. On the first run of the program, you will have to log in to google
-2. The script will save the crendentials token for future runs (IT DOES NOT SAVE YOUR INFORMATION)
-3. Playlists will be listed with numbers in the terminal
-4. Enter the number corresponding to playlist in the terminal
-5. Selenium will download the mp3s using https://cobalt.tools (terminal will show download progress)
-6. Access mp3s in the mp3_folder
+1. Every playlist on YouTube has a playlist id. You can find it by locating the random combination of letters, numbers, and symbols after the "=" sign in the url of the playlist. (Make sure the playlist is public)
+2. The python script will collect all the videos from the playlist and grab their urls.
+3. A webscraper (Selenium) is then used to download the audio from the videos as mp3 files using https://cobalt.tools (terminal will show download progress)
+4. Access mp3s in the mp3_folder
 
 
 **Notes**

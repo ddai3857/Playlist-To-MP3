@@ -4,8 +4,6 @@ import pickle
 import re
 
 from googleapiclient.discovery import build
-from google_auth_oauthlib.flow import InstalledAppFlow
-from google.auth.transport.requests import Request
 
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
@@ -17,85 +15,11 @@ from selenium.webdriver.chrome.options import Options
 
 import time
 
-def googleLogin():
-    credentials = None
-    
-    while (True):
-        if (os.path.exists("token.pickle")):
-            new_user = input("Do u want to sign in as a new user? (y/n): ")
-            if (new_user == "y"):
-                if (os.path.exists("token.pickle")):
-                    os.remove("token.pickle")
-                break
-            if (new_user == "n"):
-                break
-            print("Invalid input")
-            print()
-        else:
-            break
-        
-        
+# type in your own api key
+api_key = ""
 
-    if os.path.exists("token.pickle"):
-        print("Loading Credentials From File...")
-        with open("token.pickle", "rb") as token:
-            credentials = pickle.load(token)
-            
-    scopes = ["https://www.googleapis.com/auth/youtube.readonly"]
-
-    if not credentials or not credentials.valid:
-        if credentials and credentials.expired and credentials.refresh_token:
-            print("Refreshing Access Token...")
-            credentials.refresh(Request())
-        else:
-            print("Fetching New Tokens...")
-            flow = InstalledAppFlow.from_client_secrets_file("client_secret.json",
-                                                    scopes=scopes)
-            
-            flow.run_local_server(port=8080, prompt="consent", authorization_prompt_message="")
-            credentials = flow.credentials
-            
-            with open("token.pickle", "wb") as f:
-                print("saving Credentuials for Future Use...")
-                pickle.dump(credentials, f)
-    
-    return credentials
-
-def playlistVideosToUrl(credentials):
-    youtube = build("youtube", "v3", credentials=credentials)
-
-    request = youtube.playlists().list(part="snippet", mine=True, maxResults = 50)
-
-    response = request.execute()
-    
-    playlist_ids = []
-    playlist_titles = []
-    
-    print()
-
-    for i, item in enumerate(response["items"]):
-        playlist_ids.append(item["id"])
-        
-        playlist_titles.append(item["snippet"]["title"])
-    
-    print("PLAYLISTS")
-    print("---------")
-    for i, title in enumerate(playlist_titles):
-        print(f"{i + 1}. {title}")   
-
-    while (True):
-        print()
-        selected_playlist_idx = input("Type in the number associated with the playlist you want to convert to mp3s: ")
-        print()
-        
-        if (not(selected_playlist_idx.isdigit()) or int(selected_playlist_idx) < 1 or int(selected_playlist_idx) > len(playlist_titles)):
-            print("Invalid Number")
-            continue
-
-        selected_playlist_idx = int(selected_playlist_idx) - 1
-        break
-    
-    selected_playlist_id = playlist_ids[selected_playlist_idx]
+def playlistVideosToUrl(playlistId):
+    youtube = build("youtube", "v3", developerKey=api_key)
     
     video_ids = []
     video_titles = []
@@ -104,7 +28,7 @@ def playlistVideosToUrl(credentials):
     bad_chars = ['<', '>', ':', "\"", "/", "\\", "\|", "\?", "*"]
     
     while (True):
-        video_request = youtube.playlistItems().list(part="contentDetails, snippet", playlistId=selected_playlist_id, pageToken=pageToken, maxResults=50)
+        video_request = youtube.playlistItems().list(part="contentDetails, snippet", playlistId=playlistId, pageToken=pageToken, maxResults=50)
         video_response = video_request.execute()
         
         for item in video_response["items"]:
@@ -207,6 +131,6 @@ def urlToMp3(youtube_urls, youtube_titles):
     return
 
 if __name__ == "__main__":
-    credentials = googleLogin()
-    video_urls, video_titles = playlistVideosToUrl(credentials)
+    playlistId = input("Enter your playlist id: ")
+    video_urls, video_titles = playlistVideosToUrl(playlistId)
     urlToMp3(video_urls, video_titles)
