@@ -12,7 +12,7 @@
     selenium
 
 **Details**
-1. You will be prompted to enter the url of the playlist you want to use
+1. You will be prompted to enter the url of the playlist you want to use (MAKE SURE YOUR PLAYLIST IS PUBLIC)
 2. The python script will collect all the videos from the playlist and grab their urls
 3. A webscraper (Selenium) is then used to download the audio from the videos as mp3 files using https://cobalt.tools (terminal will show download progress)
 4. Access the new mp3 files in the mp3_folder
